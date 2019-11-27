@@ -22,12 +22,13 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.15",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
     "scroll-smooth": "^1.1.0",
-    "scrollparent": "^2.0.1",
-    "style-loader": "^1.0.0",
-    "styled-components": "^4.4.1"
+    "scrollparent": "^2.0.1"
+  },
+  "peerDependencies": {
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "styled-components": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -39,6 +40,10 @@
     "css-loader": "^3.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "styled-components": "^4.0.0",
+    "style-loader": "^1.0.0",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.2.0",
     "web-dev-server": "^1.6.7",
