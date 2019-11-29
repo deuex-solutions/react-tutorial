@@ -1,87 +1,103 @@
 import React, { useState, useReducer, useEffect, useRef, useCallback} from 'react';
-import {getNodeRect, getWindow, inView, isBody} from './Utils';
 import Scrollparent from 'scrollparent';
 import scrollSmooth from 'scroll-smooth';
+import cn from 'classnames'
 import _ from 'lodash';
+import {getNodeRect, getWindow, inView, isBody, stepWait} from './Utils';
 import {
   SvgMask,
   Guide,
-  // Badge,
+  Badge,
   Controls,
   Arrow,
   Navigation,
   Dot
 } from './components/index';
+import {propTypes, defaultProps} from './propTypes';
+import CN from './classNames'
 
-const defaultConfig = {
-  showButtons: false,
-  showNavigation: false,
-  stepWait: 500,
-  scrollDuration: 500
-};
 
-const ReactTutorial = ({
-  steps, 
-  options, 
-  playTour,
-  onRequestClose,
-  showButtons,
-  showNavigation,
-  // scrollDuration,
-  prevButton,
-  showNavigationNumber,
-  disableDotsNavigation,
-  lastStepNextButton,
-  nextButton
-}) => {
-  const [config] = useState(options || defaultConfig);
+const ReactTutorial = props => {
+  const {
+    steps, 
+    playTour,
+    onRequestClose,
+    showButtons,
+    showNavigation,
+    prevButton,
+    showNavigationNumber,
+    children,
+    className,
+    showNumber,
+    scrollDuration,
+    maskSpace,
+    disableKeyboardNavigation,
+    disableInteraction,
+    highlightedMaskClassName,
+    rounded,
+    maskClassName,
+    accentColor,
+    scrollOffset,
+    onAfterOpen,
+    onBeforeClose,
+    inViewThreshold,
+    disableDotsNavigation,
+    lastStepNextButton,
+    nextButton,
+    startAt,
+    stepWaitTimer
+  } = props;
   const [totalSteps] = useState(steps.length);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [tourPlayInternal, setTourPlayInternal] = useState(true);
+  const [currentStep, setCurrentStep] = useState(typeof startAt === 'number' ? startAt : 0);
   const balloonRef = useRef(null);
+  const [tourPlaying, setTourPlaying] = useState(playTour);
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const startTour = useCallback( async () => {
+  const startTour = useCallback(() => {
     if( currentStep >= 0 && currentStep < totalSteps){
       const step = steps[currentStep];
       stepStart(step);
       performStep(step);
+    } else {
+      close();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
 
   useEffect(() => {
     if(playTour) {
-      setTourPlayInternal(tourPlayInternal && playTour);
       startTour();
     }
-
+    if(playTour !== tourPlaying && playTour) {
+      if (balloonRef.current) {
+        balloonRef.current.focus()
+        console.log('onAfterOpen called...')
+        if (onAfterOpen && typeof onAfterOpen === 'function') {
+          onAfterOpen(helper.current);
+        }
+      }
+      setTourPlaying(playTour);
+    }
+    window.addEventListener('keydown', keyHandler, false)
     window.addEventListener('resize', handleResize);
-
     return () => {
+      window.removeEventListener('keydown', keyHandler, false)
       window.removeEventListener('resize', handleResize);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[playTour, startTour]);
+  }, [playTour, startTour]);
 
   async function stepUp () {
     if(currentStep + 1 < totalSteps) {
-      await stepWait(500);
+      await stepWait(stepWaitTimer);
       setCurrentStep(currentStep + 1);
-      // startTour();
     } else {
       close();
     }
   }
 
-  async function goTo(i){
-    await stepWait(500);
+  const goTo = useCallback( async (i) => {
+    await stepWait(stepWaitTimer);
     setCurrentStep(i);
-  }
-
-  function stepWait (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  } 
+  }, [setCurrentStep]);
 
   function handleResize(e) {
     if(!playTour) {return;}
@@ -91,33 +107,38 @@ const ReactTutorial = ({
   };
 
   function stepDown() {
-      setCurrentStep(currentStep - 1);
+    setCurrentStep(currentStep - 1);
   }
 
   function stepStart (step) {
-    config.beforeStep && config.beforeStep(step);
+    step.beforeStep && step.beforeStep(step);
   }
 
-  function stepEnd (step) {
-    config.afterStep && config.afterStep(step);
+  function stepEnd () {
+    const step = steps[currentStep];
+    step.afterStep && step.afterStep(step);
     stepUp();
-    // startTour();
   }
 
   function close() {
+    if (onBeforeClose && typeof onBeforeClose === 'function') {
+      onBeforeClose(balloonRef.current)
+    }
     onRequestClose();
+    setTourPLaying(false);
   }
 
-  const performStep = async (step) => {
-    // const step = steps[currentStep];
-    // if(step.isRendered) {return;}
-    console.log(step);
+  const performStep = (step) => {
     const node = step.selector ? document.querySelector(step.selector) : null;
     if( (_.isNull(node) || _.isUndefined(node) ) && step.actionType !== actionType.WAIT){
-      setTourPlayInternal(false);
+      close();
       console.error(`Element could not found with selector: ${step.selector} \n Please update selector and try again`);
     }
-    bringNodeToView(node, step);    
+    bringNodeToView(node, step);
+    attchListeners(node, step);
+  }
+
+  async function attchListeners(node, step){
     switch(step.actionType) {
       case actionType.CLICK:
         node.addEventListener('click', clickActionPerformed);
@@ -141,14 +162,13 @@ const ReactTutorial = ({
         window.addEventListener('mousemove', dragMouseMove);
         dropNode && dropNode.addEventListener('mouseup', dragMouseUp);
         break;
-      default:
-      case actionType.CUSTOM:
-
-        break;
       case actionType.WAIT:
         step.isRendered = true;
-        await stepWait(step.miliseconds);
+        await stepWait(step.waitTimer);
         stepEnd();
+        break;
+      case actionType.CUSTOM:
+      default:
         break;
     }
     step.isRendered = true;
@@ -158,14 +178,16 @@ const ReactTutorial = ({
     const {w, h} = getWindow();
     if(node) {
       const nodeRect = getNodeRect(node);
-      if(!inView({...nodeRect, w, h})) {
+      if(!inView({...nodeRect, w, h, threshold: inViewThreshold})) {
         const parentScroll = Scrollparent(node);
-        const offset = nodeRect.height > h
+        const offset = scrollOffset
+        ? scrollOffset
+        : nodeRect.height > h
           ? -25
           : -(h / 2) + nodeRect.height / 2;
         scrollSmooth.to(node, {
           context: isBody(parentScroll) ? window : parentScroll,
-          duration: config.scrollDuration,
+          duration: scrollDuration,
           offset,
           callback: _node => {
             makeCalculations(getNodeRect(_node), step.position);
@@ -184,7 +206,7 @@ const ReactTutorial = ({
         inDOM: false
       });
       if(step.actionType !== actionType.WAIT){
-        throw console.error('Node not found with selector: ', step.selector);
+        console.error('Node not found with selector: ', step.selector);
       }
     }
   }
@@ -199,7 +221,7 @@ const ReactTutorial = ({
   }
   function typeActionPerformed (e) {
     const stepData = steps[currentStep];
-    if(stepData.text === e.target.value) {
+    if(stepData.userTypeText === e.target.value) {
       e.target.removeEventListener('input', typeActionPerformed);
       stepEnd();
     }
@@ -260,6 +282,40 @@ const ReactTutorial = ({
     });
   }
 
+  function keyHandler(e) {
+    e.stopPropagation()
+
+    if (disableKeyboardNavigation === true) {
+      return
+    }
+
+    let isEscDisabled, isRightDisabled, isLeftDisabled
+
+    if (disableKeyboardNavigation) {
+      isEscDisabled = disableKeyboardNavigation.includes('esc')
+      isRightDisabled = disableKeyboardNavigation.includes('right')
+      isLeftDisabled = disableKeyboardNavigation.includes('left')
+    }
+
+    if (e.keyCode === 27 && !isEscDisabled) {
+      // esc
+      e.preventDefault()
+      close()
+    }
+
+    if (e.keyCode === 39 && !isRightDisabled) {
+      // right
+      e.preventDefault()
+      nextStep()
+    }
+
+    if (e.keyCode === 37 && !isLeftDisabled) {
+      // left
+      e.preventDefault()
+      prevStep()
+    }
+  }
+
   const stepContent =
     steps[currentStep] &&
     (typeof steps[currentStep].content === 'function'
@@ -271,7 +327,7 @@ const ReactTutorial = ({
         })
       : steps[currentStep].content);
 
-  return ( playTour ? <div className={'rootabsaas'}>
+  return ( playTour ? <div className={'react-tutorial'}>
     <Guide
       ref={balloonRef}
       windowWidth={state.w}
@@ -285,13 +341,23 @@ const ReactTutorial = ({
       helperWidth={state.helperWidth}
       helperHeight={state.helperHeight}
       helperPosition={state.helperPosition}
-      tabIndex={-1}
+      rounded={rounded}
+      accentColor={accentColor}
       defaultStyles={true}
-      padding={10}
+      padding={maskSpace}
+      className={cn(CN.helper.base, className, {
+        [CN.helper.isOpen]: playTour,
+      })}
     >
-    {steps[currentStep].instructionText}
+        {children}
         {stepContent}
-
+        {showNumber && (
+          <Badge data-tour-elem="badge">
+            {typeof badgeContent === 'function'
+              ? badgeContent(currentStep + 1, steps.length)
+              : currentStep + 1}
+          </Badge>
+        )}
         {(showButtons || showNavigation) && (
           <Controls data-tour-elem="controls">
             {showButtons && (
@@ -313,6 +379,9 @@ const ReactTutorial = ({
                     disabled={currentStep === i || disableDotsNavigation}
                     showNumber={showNavigationNumber}
                     data-tour-elem="dot"
+                    className={cn(CN.dot.base, {
+                      [CN.dot.active]: currentStep === i,
+                    })}
                   />
                 ))}
               </Navigation>
@@ -343,16 +412,6 @@ const ReactTutorial = ({
           </Controls>
         )}
     </Guide>
-    
-    {/* <Overlay ref={balloonRef} target={() => document.querySelector(steps[currentStep].selector)} placement={steps[currentStep] ? steps[currentStep].position : 'top'} show={steps[currentStep] ? true : false}>
-      <Popover
-        id="popover-basic"
-        placement={steps[currentStep] ? steps[currentStep].position : 'top'}
-        bsClass="tour-hive popover"
-      >
-        
-      </Popover>
-    </Overlay> */}
     <SvgMask 
       windowWidth={state.w}
       windowHeight={state.h}
@@ -360,11 +419,18 @@ const ReactTutorial = ({
       targetHeight={state.height}
       targetTop={state.top}
       targetLeft={state.left}
-      padding={5}
-      rounded={5}
-      disableInteraction={false}
-      disableInteractionClassName={'classname'} 
-      className={'classname'}
+      padding={maskSpace}
+      rounded={rounded}
+      className={maskClassName}
+      disableInteraction={
+        steps[currentStep].stepInteraction === false || disableInteraction
+          ? !steps[currentStep].stepInteraction
+          : disableInteraction
+      }
+      disableInteractionClassName={cn(
+        CN.mask.disableInteraction,
+        highlightedMaskClassName
+      )}
     />
   </div> : null);
 };
@@ -414,5 +480,8 @@ const actionType = {
   CUSTOM: 6,
   WAIT: 10
 };
+
+ReactTutorial.propTypes = propTypes;
+ReactTutorial.defaultProps = defaultProps;
 
 export default ReactTutorial;

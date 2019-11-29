@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 // import logo from './logo.svg';
 // import './App.css';
-import {ReactTutorial} from '../src';
+import ReactTutorial from '../src/index';
 
 //create your forceUpdate hook
 function useForceUpdate(){
@@ -47,26 +47,27 @@ function App() {
         <ReactTutorial 
           steps={[
             {
-                instructionText: 'Click on btn',
+                content: 'Click on btn',
                 actionType: 1,
                 position: 'top',
                 selector: "#btn1"
             },
             {
-                instructionText: 'double click this item',
+                content: 'double click this item',
                 actionType: 2,
                 position: 'top',
                 selector: "#btn2"
             },
             {
-                instructionText: 'Type "Hello world"',
+                content: 'Type "Hello world"',
                 actionType: 3,
                 position: 'top',
-                text:'Hello world',
+                userTypeText:'Hello world',
                 selector: "#name1"
             }
           ]}
           playTour={tourPlaying}
+          showNumber={true}
           onRequestClose={() => {
             tourPlaying=false;
             forceUpdate();

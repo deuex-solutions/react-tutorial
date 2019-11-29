@@ -56,3 +56,7 @@ export const isHoriz = pos => /(left|right)/.test(pos);
 export const isOutsideX = (val, windowWidth) => val > windowWidth;
 export const isOutsideY = (val, windowHeight) => val > windowHeight;
 export const safe = sum => (sum < 0 ? 0 : sum);
+
+export const stepWait = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

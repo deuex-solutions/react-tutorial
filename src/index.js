@@ -1,1 +1,2 @@
-export {default as ReactTutorial} from './ReactTutorial';
+import ReactTutorial from './ReactTutorial';
+export default ReactTutorial;
