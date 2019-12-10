@@ -12,7 +12,7 @@ const SvgMaskWrapper = styled.div`
   position: fixed;
   z-index: 99999;
   pointer-events: none;
-  color: #000;
+  color: ${props => props.maskColor ? props.maskColor : '#000'};
 `;
 
 export default function SvgMask({
@@ -27,6 +27,7 @@ export default function SvgMask({
   disableInteraction,
   disableInteractionClassName,
   className,
+  maskColor,
   onClick
 }) {
   const width = hx.safe(targetWidth + padding * 2);
@@ -35,7 +36,7 @@ export default function SvgMask({
   const left = hx.safe(targetLeft - padding);
 
   return (
-    <SvgMaskWrapper onClick={onClick}>
+    <SvgMaskWrapper onClick={onClick} maskColor={maskColor}>
       <svg
         width={windowWidth}
         height={windowHeight}

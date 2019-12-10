@@ -4,6 +4,9 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: ['babel-polyfill', './demo/index.js'],
     devtool: 'sourcemap',
+    devServer: {
+        host: '192.168.1.107'
+    },
     module: {
         rules: [
             {
@@ -37,7 +40,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '',
-        filename: '[name].js',
+        filename: 'reacttutorial.js',
         libraryTarget: 'umd'
     }
 };

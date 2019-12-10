@@ -27,6 +27,7 @@ const Guide = styled.div`
       targetRight,
       targetBottom,
       targetLeft,
+      targetWidth,
       windowWidth,
       windowHeight,
       helperWidth,
@@ -75,9 +76,9 @@ const Guide = styled.div`
       }
       const hX = hx.isOutsideX(targetLeft + helperWidth, windowWidth)
         ? hx.isOutsideX(targetRight + padding, windowWidth)
-          ? targetRight - helperWidth
-          : targetRight - helperWidth + padding
-        : targetLeft - padding;
+          ? targetRight - (helperWidth * 0.5)
+          : targetRight - (helperWidth * 0.5) + padding
+        : targetLeft - (helperWidth * 0.5 - targetWidth * 0.5) - padding;
       const x = hX > padding ? hX : padding;
       const hY = hx.isOutsideY(targetTop + helperHeight, windowHeight)
         ? hx.isOutsideY(targetBottom + padding, windowHeight)
@@ -103,6 +104,20 @@ const Guide = styled.div`
     const p = pos(helperPosition);
     return `translate(${Math.round(p[0])}px, ${Math.round(p[1])}px)`;
   }};
+
+  &::after {
+    position: absolute;
+    height: 0;
+    width: 0;
+    left: 50%;
+    top: -10px;
+    margin-left: -14px;
+    content: "";
+    border: 10px solid #fff;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 `;
 
 export default Guide;

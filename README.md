@@ -2,11 +2,18 @@
 Easy way to have a personal **Guide + tutorial** of your react app.
 
 
-## Install
-```zsh
-npm i -S react-tutorial
-# or
-yarn add react-tutorial
+## How to use
+
+> Download or clone this repo by using belowe command
+
+```js
+git clone https://github.com/deuex-solutions/react-tutorial.git
+```
+> include reacttutorial.min.js file to your project
+
+```js
+import ReactTutorial from 'reacttutorial.min.js'    // prod
+import ReactTutorial from 'reacttutorial.js'    // dev
 ```
 
 <small>[styled-components](https://www.styled-components.com/) it isn't bundled into the package and is required `styled-components@^4` and `react@^16.3` due to the use of [createRef](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs), so: </small>
@@ -263,6 +270,14 @@ Type: `number`
 
 Default: `0`
 
+#### maskColor
+
+> Color for fading out unhighlighted part
+
+type: `string`
+
+default: `#000`
+
 #### steps
 
 > Array of elements to highligt with special info and props
@@ -287,7 +302,7 @@ steps: PropTypes.arrayOf(
                 PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
             ]),
             dropSelector: PropTypes.string,
-            actionType: PropTypes.oneOf([1,2,3,4,5,6,10]),
+            actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragndrop','dragwithmove', 'custom', 'wait']),
             userTypeText: PropTypes.string,
             waitTimer: PropTypes.number,
             beforeStep: PropTypes.func,
@@ -298,24 +313,24 @@ steps: PropTypes.arrayOf(
 ##### actionType number
 
 ```js
-CLICK: 1, // StepUp will be done when user click on element with given selector
-DBL_CLICK: 2,  // StepUp will be done when user dbl click on element with given selector
-TYPING: 3,  // StepUp will be done when user type exact string as userTypeText on element with given selector
-DRAG_N_DROP: 4,  // StepUp will be done when user drag element with given selector and drop it to element with dropSelector
-DRAG_WITH_MOUSE_MOVE:5,  // StepUp will be done when user perform mouseDown element with given selector, move it to dropSelector element and at last perform mouse up on the dropselector element
-CUSTOM: 6,  // Control of stepUp is in authors hand by providing function to content wich will have goto and step as nextstep number
-WAIT: 10  // StepUp will be done after waitTimer is over ( waitTimer will be in ms)
+click // StepUp will be done when user click on element with given selector
+dblclick  // StepUp will be done when user dbl click on element with given selector
+typing  // StepUp will be done when user type exact string as userTypeText on element with given selector
+dragdrop  // StepUp will be done when user drag element with given selector and drop it to element with dropSelector
+dragwithmove  // StepUp will be done when user perform mouseDown element with given selector, move it to dropSelector element and at last perform mouse up on the dropselector element
+custom // Control of stepUp is in authors hand by providing function to content wich will have goto and step as nextstep number
+wait // StepUp will be done after waitTimer is over ( waitTimer will be in ms)
 ```
 
 ##### beforeStep
 
-> func will be called before performing step
+> function will be called before performing step
 
 Type: `func`
 
 ##### afterStep
 
-> func will be called before performing step
+> function will be called before performing step
 
 Type: `func`
 

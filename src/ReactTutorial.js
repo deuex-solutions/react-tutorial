@@ -45,6 +45,7 @@ const ReactTutorial = props => {
     lastStepNextButton,
     nextButton,
     startAt,
+    maskColor,
     stepWaitTimer
   } = props;
   const [totalSteps] = useState(steps.length);
@@ -80,6 +81,7 @@ const ReactTutorial = props => {
     window.addEventListener('keydown', keyHandler, false)
     window.addEventListener('resize', handleResize);
     return () => {
+      setTourPlaying(false);
       window.removeEventListener('keydown', keyHandler, false)
       window.removeEventListener('resize', handleResize);
     };
@@ -107,7 +109,7 @@ const ReactTutorial = props => {
   };
 
   function stepDown() {
-    setCurrentStep(currentStep - 1);
+    setCurrentStep(currentStep === 0 ? currentStep : currentStep  - 1 );
   }
 
   function stepStart (step) {
@@ -125,7 +127,6 @@ const ReactTutorial = props => {
       onBeforeClose(balloonRef.current)
     }
     onRequestClose();
-    setTourPLaying(false);
   }
 
   const performStep = (step) => {
@@ -223,7 +224,9 @@ const ReactTutorial = props => {
     const stepData = steps[currentStep];
     if(stepData.userTypeText === e.target.value) {
       e.target.removeEventListener('input', typeActionPerformed);
-      stepEnd();
+      setTimeout(() => {
+        stepEnd();
+      }, 0);
     }
   }
   function dragMouseDown (e) {
@@ -306,13 +309,13 @@ const ReactTutorial = props => {
     if (e.keyCode === 39 && !isRightDisabled) {
       // right
       e.preventDefault()
-      nextStep()
+      stepUp()
     }
 
     if (e.keyCode === 37 && !isLeftDisabled) {
       // left
       e.preventDefault()
-      prevStep()
+      stepDown()
     }
   }
 
@@ -427,6 +430,7 @@ const ReactTutorial = props => {
           ? !steps[currentStep].stepInteraction
           : disableInteraction
       }
+      maskColor={maskColor}
       disableInteractionClassName={cn(
         CN.mask.disableInteraction,
         highlightedMaskClassName
@@ -472,13 +476,13 @@ function reducer(state, action) {
 }
 
 const actionType = {
-  CLICK: 1,
-  DBL_CLICK: 2,
-  TYPING: 3,
-  DRAG_N_DROP: 4,
-  DRAG_WITH_MOUSE_MOVE:5,
-  CUSTOM: 6,
-  WAIT: 10
+  CLICK: 'click',
+  DBL_CLICK: 'dblclick',
+  TYPING: 'typing',
+  DRAG_N_DROP: 'dragdrop',
+  DRAG_WITH_MOUSE_MOVE: 'dragwithmove',
+  CUSTOM: 'custom',
+  WAIT: 'wait'
 };
 
 ReactTutorial.propTypes = propTypes;

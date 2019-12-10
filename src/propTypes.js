@@ -14,7 +14,7 @@ export const propTypes = {
                 PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
             ]),
             dropSelector: PropTypes.string,
-            actionType: PropTypes.oneOf([1,2,3,4,5,6,10]),
+            actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragdrop','dragwithmove', 'custom', 'wait']),
             userTypeText: PropTypes.string,
             waitTimer: PropTypes.number,
             beforeStep: PropTypes.func,
@@ -36,4 +36,5 @@ export const defaultProps = {
   rounded: 0,
   accentColor: '#007aff',
   closeWithMask: true,
+  maskColor: '#000'
 }

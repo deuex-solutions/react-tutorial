@@ -1,78 +1,68 @@
-import React, {useState} from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-import ReactTutorial from '../src/index';
+import React, {useState, useCallback, useEffect} from 'react';
+import ReactTutorial from '../dist/reacttutorial.min.js';
+import MaterialButtonPrimary from './src/components/MaterialButtonPrimary';
+import PathCreator from './src/components/PathCreator';
+import withSteps from './src/components/withStepsComponent';
 
-//create your forceUpdate hook
-function useForceUpdate(){
-  const [value, setValue] = useState(true); //boolean state
-  return () => setValue(!value); // toggle the state to force render
-}
-let tourPlaying = false;
+const tuteSteps = [
+  {
+      content: 'Click on btn',
+      actionType: 'click',
+      position: 'top',
+      selector: "#btn1"
+  },
+  {
+      content: 'double click this item',
+      actionType: 'dblclick',
+      position: 'top',
+      selector: "#btn2"
+  },
+  {
+      content: 'Type "Hello world"',
+      actionType: 'typing',
+      position: 'top',
+      userTypeText:'Hello world',
+      selector: "#name1"
+  }
+];
+const stepCollector = {};
+const PathWithSteps = withSteps(PathCreator, stepCollector);
+
 function App() {
-  const forceUpdate = useForceUpdate();
+  const [tourPlaying, setTourPlaying] = useState(false);
   const [typeValue, setTypeValue] = useState('');
+  const [showNameTextBox, setShowNameTextBox] = useState(false);
+  const [color, setColor] = useState('red');
+  const [stps, setSteps] = useState(tuteSteps);
+  
+  useEffect(() => {
+    setSteps([...stps, ...stepCollector.getSteps()])
+  },[])
+
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <div>
-        <button id={'btn6'} onClick={() => {
-          tourPlaying = true;
-          forceUpdate(); 
-        }}>start tour</button>
-      </div>
-      <div>
-        <button id={'btn1'}>button 1</button>
-      </div>
-      <div>
-        <span id={'btn2'}>button 2</span>
-      </div>
-      <div>
-        <input type="text" name="name" id='name1' value={typeValue} onChange={(e) => setTypeValue(e.target.value)} />
-      </div>
-      
+      <p>Welcome to react Tour</p>
+      <MaterialButtonPrimary 
+        name={'Try it'}
+        onClick={() => {setTourPlaying(true)}}
+      />
+      <MaterialButtonPrimary
+        name={'GitHub'}
+      />
+      <button id={'btn1'} onClick={() => setShowNameTextBox(true)}>Click me!!</button>
+      <div id={'btn2'} onDoubleClick={ () => {color === 'red' ? setColor('blue') : setColor('red');}} style={{background: color, height: '100px', width: '100px'}}>Double click to toggle color</div>
+      {showNameTextBox ? <input type={'text'} id={'name1'} onChange={(e) => {setTypeValue(e.target.value)}} value={typeValue} placeholder={'Enter Text'} /> : null}
+      <PathWithSteps />
+      {tourPlaying ? 
         <ReactTutorial 
-          steps={[
-            {
-                content: 'Click on btn',
-                actionType: 1,
-                position: 'top',
-                selector: "#btn1"
-            },
-            {
-                content: 'double click this item',
-                actionType: 2,
-                position: 'top',
-                selector: "#btn2"
-            },
-            {
-                content: 'Type "Hello world"',
-                actionType: 3,
-                position: 'top',
-                userTypeText:'Hello world',
-                selector: "#name1"
-            }
-          ]}
+          steps={stps}
+          maskColor={'transparent'}
           playTour={tourPlaying}
           showNumber={true}
           onRequestClose={() => {
-            tourPlaying=false;
-            forceUpdate();
+            setTourPlaying(false);
           }}
-        />
+        /> : null }
     </div>
   );
 }
