@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import ReactTutorial from '../dist/reacttutorial.min.js';
+import ReactTutorial from '../src/';
 import MaterialButtonPrimary from './src/components/MaterialButtonPrimary';
 import PathCreator from './src/components/PathCreator';
 import withSteps from './src/components/withStepsComponent';
@@ -8,7 +8,7 @@ const tuteSteps = [
   {
       content: 'Click on btn',
       actionType: 'click',
-      position: 'top',
+      position: 'bottom',
       selector: "#btn1"
   },
   {
@@ -56,7 +56,6 @@ function App() {
       {tourPlaying ? 
         <ReactTutorial 
           steps={stps}
-          maskColor={'transparent'}
           playTour={tourPlaying}
           showNumber={true}
           onRequestClose={() => {

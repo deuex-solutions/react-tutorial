@@ -76,9 +76,9 @@ const Guide = styled.div`
       }
       const hX = hx.isOutsideX(targetLeft + helperWidth, windowWidth)
         ? hx.isOutsideX(targetRight + padding, windowWidth)
-          ? targetRight - (helperWidth * 0.5)
-          : targetRight - (helperWidth * 0.5) + padding
-        : targetLeft - (helperWidth * 0.5 - targetWidth * 0.5) - padding;
+          ? targetRight - (helperWidth)
+          : targetRight - (helperWidth) + padding
+        : targetLeft - (Math.abs(helperWidth * 0.5 - targetWidth * 0.5)) - (padding * 0.5);
       const x = hX > padding ? hX : padding;
       const hY = hx.isOutsideY(targetTop + helperHeight, windowHeight)
         ? hx.isOutsideY(targetBottom + padding, windowHeight)
