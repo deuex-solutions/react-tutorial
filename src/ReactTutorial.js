@@ -19,7 +19,7 @@ import CN from './classNames'
 
 const ReactTutorial = props => {
   const {
-    steps, 
+    steps,
     playTour,
     onRequestClose,
     showButtons,
@@ -51,6 +51,7 @@ const ReactTutorial = props => {
   const [totalSteps] = useState(steps.length);
   const [currentStep, setCurrentStep] = useState(typeof startAt === 'number' ? startAt : 0);
   const balloonRef = useRef(null);
+  const helper = useRef(null);
   const [tourPlaying, setTourPlaying] = useState(playTour);
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -356,9 +357,10 @@ const ReactTutorial = props => {
         {stepContent}
         {showNumber && (
           <Badge data-tour-elem="badge">
-            {typeof badgeContent === 'function'
+            {/* {typeof badgeContent === 'function'
               ? badgeContent(currentStep + 1, steps.length)
-              : currentStep + 1}
+              : currentStep + 1} */}
+              {currentStep + 1}
           </Badge>
         )}
         {(showButtons || showNavigation) && (
@@ -415,7 +417,7 @@ const ReactTutorial = props => {
           </Controls>
         )}
     </Guide>
-    <SvgMask 
+    <SvgMask
       windowWidth={state.w}
       windowHeight={state.h}
       targetWidth={state.width}
@@ -450,7 +452,7 @@ const initialState = {
   h: 0,
   node: null
 };
-  
+
 function reducer(state, action) {
   switch (action.type) {
   case 'HAS_DOM_NODE':
