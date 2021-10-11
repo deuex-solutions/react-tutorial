@@ -151,6 +151,9 @@ const ReactTutorial = props => {
       case actionType.TYPING:
         node.addEventListener('input', typeActionPerformed);
         break;
+      case actionType.ENTER:
+        node.addEventListener('keydown', enterActionPerformed);
+        break;
       case actionType.DRAG_N_DROP:
         node.addEventListener('mousedown', dragMouseDown);
         let dropNode = step.dropSelector ? document.querySelector(step.dropSelector) : null;
@@ -220,6 +223,12 @@ const ReactTutorial = props => {
   function dblClickActionPerformed (e) {
     e.target.removeEventListener('click', dblClickActionPerformed);
     stepEnd();
+  }
+  function enterActionPerformed (e) {
+    if(e.key === "Enter"){
+      e.target.removeEventListener('keydown', enterActionPerformed);
+      stepEnd();
+    }
   }
   function typeActionPerformed (e) {
     const stepData = steps[currentStep];
@@ -481,6 +490,7 @@ const actionType = {
   CLICK: 'click',
   DBL_CLICK: 'dblclick',
   TYPING: 'typing',
+  ENTER: 'enter',
   DRAG_N_DROP: 'dragdrop',
   DRAG_WITH_MOUSE_MOVE: 'dragwithmove',
   CUSTOM: 'custom',
