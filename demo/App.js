@@ -6,6 +6,12 @@ import withSteps from './src/components/withStepsComponent';
 
 const tuteSteps = [
   {
+    content: 'Type Somthing and hit Enter',
+    actionType: 'enter',
+    position: 'bottom',
+    selector: "#name2"
+  },
+  {
       content: 'Click on btn',
       actionType: 'click',
       position: 'bottom',
@@ -34,7 +40,7 @@ function App() {
   const [showNameTextBox, setShowNameTextBox] = useState(false);
   const [color, setColor] = useState('red');
   const [stps, setSteps] = useState(tuteSteps);
-  
+
   useEffect(() => {
     setSteps([...stps, ...stepCollector.getSteps()])
   },[])
@@ -42,7 +48,7 @@ function App() {
   return (
     <div className="App">
       <p>Welcome to react Tour</p>
-      <MaterialButtonPrimary 
+      <MaterialButtonPrimary
         name={'Try it'}
         onClick={() => {setTourPlaying(true)}}
       />
@@ -52,9 +58,10 @@ function App() {
       <button id={'btn1'} onClick={() => setShowNameTextBox(true)}>Click me!!</button>
       <div id={'btn2'} onDoubleClick={ () => {color === 'red' ? setColor('blue') : setColor('red');}} style={{background: color, height: '100px', width: '100px'}}>Double click to toggle color</div>
       {showNameTextBox ? <input type={'text'} id={'name1'} onChange={(e) => {setTypeValue(e.target.value)}} value={typeValue} placeholder={'Enter Text'} /> : null}
+      <input type={'text'} id={'name2'} placeholder={'Type Text and hit enter'} />
       <PathWithSteps />
-      {tourPlaying ? 
-        <ReactTutorial 
+      {tourPlaying ?
+        <ReactTutorial
           steps={stps}
           playTour={tourPlaying}
           showNumber={true}

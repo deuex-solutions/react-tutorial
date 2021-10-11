@@ -5,7 +5,7 @@ module.exports = {
     entry: ['babel-polyfill', './demo/index.js'],
     devtool: 'sourcemap',
     devServer: {
-        host: '192.168.1.107'
+        host: 'localhost'
     },
     module: {
         rules: [

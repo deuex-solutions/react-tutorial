@@ -14,7 +14,7 @@ export const propTypes = {
                 PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
             ]),
             dropSelector: PropTypes.string,
-            actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragdrop','dragwithmove', 'custom', 'wait']),
+            actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragdrop','dragwithmove', 'custom', 'enter', 'wait']),
             userTypeText: PropTypes.string,
             waitTimer: PropTypes.number,
             beforeStep: PropTypes.func,
