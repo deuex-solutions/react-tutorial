@@ -4,40 +4,45 @@ import MaterialButtonPrimary from './src/components/MaterialButtonPrimary';
 import PathCreator from './src/components/PathCreator';
 import withSteps from './src/components/withStepsComponent';
 
-const tuteSteps = [
-  {
-    content: 'Type Somthing and hit Enter',
-    actionType: 'enter',
-    position: 'bottom',
-    selector: "#name2"
-  },
-  {
-      content: 'Click on btn',
-      actionType: 'click',
-      position: 'bottom',
-      selector: "#btn1"
-  },
-  {
-      content: 'double click this item',
-      actionType: 'dblclick',
-      position: 'top',
-      selector: "#btn2"
-  },
-  {
-      content: 'Type "Hello world"',
-      actionType: 'typing',
-      position: 'top',
-      userTypeText:'Hello world',
-      selector: "#name1"
-  }
-];
-const stepCollector = {};
-const PathWithSteps = withSteps(PathCreator, stepCollector);
 
 function App() {
+  const [showNameTextBox, setShowNameTextBox] = useState(false);
+
+  const tuteSteps = [
+    {
+      content: 'Type Somthing and hit Enter',
+      actionType: 'enter',
+      position: 'bottom',
+      selector: "#name2"
+    },
+    {
+        content: 'Click on btn, Lorem Ipsum is simply dummy text of the printing and typesetting Lorem Ipsum is simply dummy text of the printing and typesetting',
+        actionType: 'click',
+        position: 'bottom',
+        selector: "#btn1",
+        beforNext: () => {setShowNameTextBox(true)}
+    },
+    {
+        content: 'double click this item',
+        actionType: 'dblclick',
+        position: 'top',
+        selector: "#btn2",
+        beforPrev: () => {setShowNameTextBox(false)}
+    },
+    {
+        content: 'Type "Hello world"',
+        actionType: 'typing',
+        position: 'top',
+        userTypeText:'Hello world',
+        selector: "#name1"
+    }
+  ];
+
+  const stepCollector = {};
+  const PathWithSteps = withSteps(PathCreator, stepCollector);
+
   const [tourPlaying, setTourPlaying] = useState(false);
   const [typeValue, setTypeValue] = useState('');
-  const [showNameTextBox, setShowNameTextBox] = useState(false);
   const [color, setColor] = useState('red');
   const [stps, setSteps] = useState(tuteSteps);
 
