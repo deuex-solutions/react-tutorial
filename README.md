@@ -306,7 +306,9 @@ steps: PropTypes.arrayOf(
             userTypeText: PropTypes.string,
             waitTimer: PropTypes.number,
             beforeStep: PropTypes.func,
-            afterStep: PropTypes.func
+            afterStep: PropTypes.func,
+            beforePrev: PropTypes.func,
+            beforeNext: PropTypes.func
         }),
 ```
 
@@ -331,6 +333,16 @@ Type: `func`
 ##### afterStep
 
 > function will be called before performing step
+
+Type: `func`
+##### beforePrev
+
+> function will be called onClick of Prev button and perform task before going to prev step
+
+Type: `func`
+##### beforeNext
+
+> function will be called onClick of Next button and perform task before going to Next step
 
 Type: `func`
 

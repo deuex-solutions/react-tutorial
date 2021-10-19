@@ -18,7 +18,9 @@ export const propTypes = {
             userTypeText: PropTypes.string,
             waitTimer: PropTypes.number,
             beforeStep: PropTypes.func,
-            afterStep: PropTypes.func
+            afterStep: PropTypes.func,
+            beforePrev: PropTypes.func,
+            beforeNext: PropTypes.func
         })
     )
 }
