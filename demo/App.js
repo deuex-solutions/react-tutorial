@@ -20,14 +20,14 @@ function App() {
         actionType: 'click',
         position: 'bottom',
         selector: "#btn1",
-        beforNext: () => {setShowNameTextBox(true)}
+        beforeNext: () => {setShowNameTextBox(true)}
     },
     {
         content: 'double click this item',
         actionType: 'dblclick',
         position: 'top',
         selector: "#btn2",
-        beforPrev: () => {setShowNameTextBox(false)}
+        beforePrev: () => {setShowNameTextBox(false)}
     },
     {
         content: 'Type "Hello world"',

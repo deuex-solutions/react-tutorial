@@ -91,7 +91,7 @@ const ReactTutorial = props => {
   async function stepUp () {
     if(currentStep + 1 < totalSteps) {
       const step = steps[currentStep];
-      step.beforNext && step.beforNext()
+      step.beforeNext && step.beforeNext()
       await stepWait(stepWaitTimer);
       setCurrentStep(currentStep + 1);
     } else {
@@ -113,7 +113,7 @@ const ReactTutorial = props => {
 
   async function stepDown() {
     const step = steps[currentStep];
-    step.beforPrev && step.beforPrev()
+    step.beforePrev && step.beforePrev()
     await stepWait(stepWaitTimer);
     setCurrentStep(currentStep === 0 ? currentStep : currentStep  - 1 );
   }
