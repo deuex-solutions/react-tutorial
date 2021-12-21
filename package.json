@@ -1,5 +1,5 @@
 {
-  "name": "react-tutorial",
+  "name": "@deuex-solutions/react-tutorial",
   "version": "1.0.0",
   "description": "To learn user about how component works in the react app.",
   "main": "dist/reacttutorial.min.js",
