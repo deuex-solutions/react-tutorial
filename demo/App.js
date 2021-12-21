@@ -10,8 +10,9 @@ function App() {
 
   const tuteSteps = [
     {
-      content: 'Type Somthing and hit Enter',
+      content: 'Type "Hello world" and hit Enter',
       actionType: 'enter',
+      userTypeText:'Hello world',
       position: 'bottom',
       selector: "#name2"
     },
