@@ -91,6 +91,12 @@ const ReactTutorial = props => {
   async function stepUp () {
     if(currentStep + 1 < totalSteps) {
       const step = steps[currentStep];
+      if(step.userTypeText){
+        const node = step.selector ? document.querySelector(step.selector) : null;
+        if(node.value !== step.userTypeText){
+         return;
+       }
+      }
       step.beforeNext && step.beforeNext()
       await stepWait(stepWaitTimer);
       setCurrentStep(currentStep + 1);
@@ -230,9 +236,20 @@ const ReactTutorial = props => {
     stepEnd();
   }
   function enterActionPerformed (e) {
-    if(e.key === "Enter"){
-      e.target.removeEventListener('keydown', enterActionPerformed);
-      stepEnd();
+    const stepData = steps[currentStep];
+    if(stepData.userTypeText){
+      if(stepData.userTypeText === e.target.value) {
+        if(e.key === "Enter"){
+          e.target.removeEventListener('keydown', enterActionPerformed);
+          stepEnd();
+        }
+        e.target.removeEventListener('input', enterActionPerformed);
+      }
+    }else {
+      if(e.key === "Enter"){
+        e.target.removeEventListener('keydown', enterActionPerformed);
+        stepEnd();
+      }
     }
   }
   function typeActionPerformed (e) {
