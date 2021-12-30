@@ -277,6 +277,13 @@ Default: `0`
 type: `string`
 
 default: `#000`
+#### allowScreenScroll
+
+> allow scrolling screen
+
+type: `bool`
+
+default: `false`
 
 #### steps
 
@@ -301,6 +308,7 @@ steps: PropTypes.arrayOf(
                 PropTypes.arrayOf(PropTypes.number),
                 PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
             ]),
+            arrowPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
             dropSelector: PropTypes.string,
             actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragndrop','dragwithmove', 'custom', 'wait']),
             userTypeText: PropTypes.string,

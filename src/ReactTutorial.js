@@ -14,6 +14,7 @@ import {
   Dot
 } from './components/index';
 import {propTypes, defaultProps} from './propTypes';
+import useScrollBlock from "./components/useScrollBlock"
 import CN from './classNames'
 
 
@@ -46,13 +47,15 @@ const ReactTutorial = props => {
     nextButton,
     startAt,
     maskColor,
-    stepWaitTimer
+    stepWaitTimer,
+    allowScreenScroll = false,
   } = props;
   const [totalSteps] = useState(steps.length);
   const [currentStep, setCurrentStep] = useState(typeof startAt === 'number' ? startAt : 0);
   const balloonRef = useRef(null);
   const helper = useRef(null);
   const [tourPlaying, setTourPlaying] = useState(playTour);
+  const [blockScroll, allowScroll] = useScrollBlock();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const startTour = useCallback(() => {
@@ -66,6 +69,11 @@ const ReactTutorial = props => {
   }, [currentStep]);
 
   useEffect(() => {
+    if (allowScreenScroll) {
+      allowScroll();
+    } else {
+      blockScroll();
+    }
     if(playTour) {
       startTour();
     }
@@ -376,6 +384,7 @@ const ReactTutorial = props => {
       helperWidth={state.helperWidth}
       helperHeight={state.helperHeight}
       helperPosition={state.helperPosition}
+      arrowPosition={steps[currentStep].arrowPosition}
       rounded={rounded}
       accentColor={accentColor}
       defaultStyles={true}
