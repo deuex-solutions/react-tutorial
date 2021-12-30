@@ -306,9 +306,9 @@ steps: PropTypes.arrayOf(
               ]).isRequired,
             position: PropTypes.oneOfType([
                 PropTypes.arrayOf(PropTypes.number),
-                PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
+                PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'centre']),
             ]),
-            arrowPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
+            arrowPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
             dropSelector: PropTypes.string,
             actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragndrop','dragwithmove', 'custom', 'wait']),
             userTypeText: PropTypes.string,
