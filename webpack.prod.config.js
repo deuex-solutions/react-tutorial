@@ -16,7 +16,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '',
-        filename: 'reacttutorial.min.js',
+        filename: 'reacttour.min.js',
         libraryTarget: 'umd'
     },
     externals: [

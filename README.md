@@ -9,11 +9,11 @@ Easy way to have a personal **Guide + tutorial** of your react app.
 ```js
 git clone https://github.com/deuex-solutions/react-tutorial.git
 ```
-> include reacttutorial.min.js file to your project
+> include reacttour.min.js file to your project
 
 ```js
-import ReactTutorial from 'reacttutorial.min.js'    // prod
-import ReactTutorial from 'reacttutorial.js'    // dev
+import ReactTutorial from 'reacttour.min.js'    // prod
+import ReactTutorial from 'reacttour.js'    // dev
 ```
 
 <small>[styled-components](https://www.styled-components.com/) it isn't bundled into the package and is required `styled-components@^4` and `react@^16.3` due to the use of [createRef](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs), so: </small>
