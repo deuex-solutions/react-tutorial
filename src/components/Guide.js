@@ -6,7 +6,7 @@ const Guide = styled.div`
   ${props =>
     props.defaultStyles
       ? `
-  max-width: 331px;
+  max-width: 400px;
   min-width: 150px;
   padding-right: 40px;
   border-radius: ${10}px;
@@ -18,8 +18,8 @@ const Guide = styled.div`
       : ''}
   position: fixed;
   transition: transform 0.3s;
-  top: 0;
-  left: 0;
+  top: 12px;
+  left: 6px;
   z-index: 1000000;
   transform: ${props => {
     const {
@@ -106,17 +106,41 @@ const Guide = styled.div`
   }};
 
   &::after {
+    background: #fff;
     position: absolute;
     height: 0;
     width: 0;
-    left: 50%;
-    top: -10px;
     margin-left: -14px;
     content: "";
     border: 10px solid #fff;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+    ${props => {
+      switch (props.arrowPosition) {
+        case "left":
+          return `
+          left: 4px;
+          top: 40%;
+        `;
+        case "right":
+          return `
+          right: -10px;
+          top: 40%;
+        `;
+        case "bottom":
+          return `
+          left: 50%;
+          bottom: -10px;
+        `;
+        case "top":
+        default:
+          return `
+            left: 50%;
+            top: -10px;
+          `;
+      }
+    }}
   }
 `;
 

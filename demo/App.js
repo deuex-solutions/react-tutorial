@@ -26,14 +26,16 @@ function App() {
     {
         content: 'double click this item',
         actionType: 'dblclick',
-        position: 'top',
+        position: 'right',
+        arrowPosition: 'left',
         selector: "#btn2",
         beforePrev: () => {setShowNameTextBox(false)}
     },
     {
         content: 'Type "Hello world"',
         actionType: 'typing',
-        position: 'top',
+        position: 'right',
+        arrowPosition: 'left',
         userTypeText:'Hello world',
         selector: "#name1"
     }
@@ -52,7 +54,7 @@ function App() {
   },[])
 
   return (
-    <div className="App">
+    <div style={{height: '200vh'}} className="App">
       <p>Welcome to react Tour</p>
       <MaterialButtonPrimary
         name={'Try it'}
