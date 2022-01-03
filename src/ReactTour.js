@@ -18,7 +18,7 @@ import useScrollBlock from "./components/useScrollBlock"
 import CN from './classNames'
 
 
-const ReactTutorial = props => {
+const ReactTour = props => {
   const {
     steps,
     playTour,
@@ -528,7 +528,7 @@ const actionType = {
   WAIT: 'wait'
 };
 
-ReactTutorial.propTypes = propTypes;
-ReactTutorial.defaultProps = defaultProps;
+ReactTour.propTypes = propTypes;
+ReactTour.defaultProps = defaultProps;
 
-export default ReactTutorial;
+export default ReactTour;
