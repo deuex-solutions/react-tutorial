@@ -1,4 +1,4 @@
-# react-tutorial
+# react-tour
 Easy way to have a personal **Guide + tutorial** of your react app.
 
 
@@ -30,7 +30,7 @@ Add the `ReactTutorial` Component in your Application, passing the `steps` with 
 
 ```js
 import React from 'react'
-import ReactTutorial from 'react-tutorial'
+import ReactTutorial from '@deuex-solutions/react-tour'
 
 class App extends Component {
   // ...
