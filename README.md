@@ -12,8 +12,8 @@ git clone https://github.com/deuex-solutions/react-tutorial.git
 > include reacttour.min.js file to your project
 
 ```js
-import ReactTutorial from 'reacttour.min.js'    // prod
-import ReactTutorial from 'reacttour.js'    // dev
+import ReactTour from 'reacttour.min.js'    // prod
+import ReactTour from 'reacttour.js'    // dev
 ```
 
 <small>[styled-components](https://www.styled-components.com/) it isn't bundled into the package and is required `styled-components@^4` and `react@^16.3` due to the use of [createRef](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs), so: </small>
@@ -26,11 +26,11 @@ yarn add styled-components@^4.0.0
 
 ## Usage
 
-Add the `ReactTutorial` Component in your Application, passing the `steps` with the elements to highlight during the _ReactTutorial_.
+Add the `ReactTour` Component in your Application, passing the `steps` with the elements to highlight during the _ReactTour_.
 
 ```js
 import React from 'react'
-import ReactTutorial from '@deuex-solutions/react-tour'
+import ReactTour from '@deuex-solutions/react-tour'
 
 class App extends Component {
   // ...
@@ -38,7 +38,7 @@ class App extends Component {
   render  (
     <>
       { /* other stuff */}
-      <ReactTutorial
+      <ReactTour
         steps={steps}
         playTour={this.state.playTour}
         onRequestClose={this.closeTour} />
@@ -55,7 +55,7 @@ const steps = [
 ]
 ```
 
-### ReactTutorial Props
+### ReactTour Props
 
 #### accentColor
 
@@ -73,7 +73,7 @@ Type: `func`
 
 ```js
 // example
-<ReactTutorial badgeContent={(curr, tot) => `${curr} of ${tot}`} />
+<ReactTour badgeContent={(curr, tot) => `${curr} of ${tot}`} />
 ```
 
 #### children
@@ -108,7 +108,7 @@ Type: `bool | array(['esc', 'right', 'left'])`
 
 ```js
 // example
-<ReactTutorial disableKeyboardNavigation={['esc']} />
+<ReactTour disableKeyboardNavigation={['esc']} />
 ```
 
 #### highlightedMaskClassName
@@ -139,7 +139,7 @@ Type: `node`
 
 ```js
 // example
-<ReactTutorial lastStepNextButton={<MyButton>Done! Let's start playing</MyButton>} />
+<ReactTour lastStepNextButton={<MyButton>Done! Let's start playing</MyButton>} />
 ```
 
 #### maskClassName
@@ -170,7 +170,7 @@ Type: `func`
 
 ```js
 // example
-<ReactTutorial onAfterOpen={target => (document.body.style.overflowY = 'hidden')} />
+<ReactTour onAfterOpen={target => (document.body.style.overflowY = 'hidden')} />
 ```
 
 #### onBeforeClose
@@ -181,7 +181,7 @@ Type: `func`
 
 ```js
 // example
-<ReactTutorial onBeforeClose={target => (document.body.style.overflowY = 'auto')} />
+<ReactTour onBeforeClose={target => (document.body.style.overflowY = 'auto')} />
 ```
 
 #### onRequestClose
@@ -256,7 +256,7 @@ Default: `true`
 
 #### startAt
 
-> Starting step when _ReactTutorial_ is open the first time
+> Starting step when _ReactTour_ is open the first time
 
 Type: `number`
 

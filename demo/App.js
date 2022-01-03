@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import ReactTutorial from '../src/';
+import ReactTour from '../src/';
 import MaterialButtonPrimary from './src/components/MaterialButtonPrimary';
 import PathCreator from './src/components/PathCreator';
 import withSteps from './src/components/withStepsComponent';
@@ -69,7 +69,7 @@ function App() {
       <input type={'text'} id={'name2'} placeholder={'Type Text and hit enter'} />
       <PathWithSteps />
       {tourPlaying ?
-        <ReactTutorial
+        <ReactTour
           steps={stps}
           playTour={tourPlaying}
           showNumber={true}

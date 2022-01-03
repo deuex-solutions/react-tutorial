@@ -1,2 +1,2 @@
-import ReactTutorial from './ReactTutorial';
-export default ReactTutorial;
+import ReactTour from './ReactTour';
+export default ReactTour;
