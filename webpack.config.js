@@ -40,7 +40,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist/'),
         publicPath: '',
-        filename: 'reacttutorial.js',
+        filename: 'reacttour.js',
         libraryTarget: 'umd'
     }
 };
