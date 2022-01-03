@@ -1,6 +1,6 @@
 # react-tutorial
-Easy way to have a personal **Guide + tutorial** of your react app.
 
+Easy way to have a personal **Guide + tutorial** of your react app.
 
 ## How to use
 
@@ -9,11 +9,12 @@ Easy way to have a personal **Guide + tutorial** of your react app.
 ```js
 git clone https://github.com/deuex-solutions/react-tutorial.git
 ```
+
 > include reacttutorial.min.js file to your project
 
 ```js
-import ReactTutorial from 'reacttutorial.min.js'    // prod
-import ReactTutorial from 'reacttutorial.js'    // dev
+import ReactTutorial from "reacttutorial.min.js"; // prod
+import ReactTutorial from "reacttutorial.js"; // dev
 ```
 
 <small>[styled-components](https://www.styled-components.com/) it isn't bundled into the package and is required `styled-components@^4` and `react@^16.3` due to the use of [createRef](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs), so: </small>
@@ -108,7 +109,7 @@ Type: `bool | array(['esc', 'right', 'left'])`
 
 ```js
 // example
-<ReactTutorial disableKeyboardNavigation={['esc']} />
+<ReactTutorial disableKeyboardNavigation={["esc"]} />
 ```
 
 #### highlightedMaskClassName
@@ -139,7 +140,9 @@ Type: `node`
 
 ```js
 // example
-<ReactTutorial lastStepNextButton={<MyButton>Done! Let's start playing</MyButton>} />
+<ReactTutorial
+  lastStepNextButton={<MyButton>Done! Let's start playing</MyButton>}
+/>
 ```
 
 #### maskClassName
@@ -170,7 +173,9 @@ Type: `func`
 
 ```js
 // example
-<ReactTutorial onAfterOpen={target => (document.body.style.overflowY = 'hidden')} />
+<ReactTutorial
+  onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
+/>
 ```
 
 #### onBeforeClose
@@ -181,7 +186,9 @@ Type: `func`
 
 ```js
 // example
-<ReactTutorial onBeforeClose={target => (document.body.style.overflowY = 'auto')} />
+<ReactTutorial
+  onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
+/>
 ```
 
 #### onRequestClose
@@ -277,6 +284,7 @@ Default: `0`
 type: `string`
 
 default: `#000`
+
 #### allowScreenScroll
 
 > allow scrolling screen
@@ -306,7 +314,7 @@ steps: PropTypes.arrayOf(
               ]).isRequired,
             position: PropTypes.oneOfType([
                 PropTypes.arrayOf(PropTypes.number),
-                PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'centre']),
+                PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
             ]),
             arrowPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
             dropSelector: PropTypes.string,
@@ -323,13 +331,13 @@ steps: PropTypes.arrayOf(
 ##### actionType number
 
 ```js
-click // StepUp will be done when user click on element with given selector
-dblclick  // StepUp will be done when user dbl click on element with given selector
-typing  // StepUp will be done when user type exact string as userTypeText on element with given selector
-dragdrop  // StepUp will be done when user drag element with given selector and drop it to element with dropSelector
-dragwithmove  // StepUp will be done when user perform mouseDown element with given selector, move it to dropSelector element and at last perform mouse up on the dropselector element
-custom // Control of stepUp is in authors hand by providing function to content wich will have goto and step as nextstep number
-wait // StepUp will be done after waitTimer is over ( waitTimer will be in ms)
+click; // StepUp will be done when user click on element with given selector
+dblclick; // StepUp will be done when user dbl click on element with given selector
+typing; // StepUp will be done when user type exact string as userTypeText on element with given selector
+dragdrop; // StepUp will be done when user drag element with given selector and drop it to element with dropSelector
+dragwithmove; // StepUp will be done when user perform mouseDown element with given selector, move it to dropSelector element and at last perform mouse up on the dropselector element
+custom; // Control of stepUp is in authors hand by providing function to content wich will have goto and step as nextstep number
+wait; // StepUp will be done after waitTimer is over ( waitTimer will be in ms)
 ```
 
 ##### beforeStep
@@ -343,11 +351,13 @@ Type: `func`
 > function will be called before performing step
 
 Type: `func`
+
 ##### beforePrev
 
 > function will be called onClick of Prev button and perform task before going to prev step
 
 Type: `func`
+
 ##### beforeNext
 
 > function will be called onClick of Next button and perform task before going to Next step
@@ -364,14 +374,14 @@ const steps = [
       <div>
         Lorem ipsum <button onClick={() => goTo(4)}>Go to Step 5</button>
         <br />
-        {inDOM && '🎉 Look at your step!'}
+        {inDOM && "🎉 Look at your step!"}
       </div>
     ),
-    position: 'top',
+    position: "top",
     // you could do something like:
     // position: [160, 250],
     style: {
-      backgroundColor: '#bada55',
+      backgroundColor: "#bada55",
     },
     // Disable interaction for this specific step.
     // Could be enabled passing `true`
@@ -379,5 +389,5 @@ const steps = [
     stepInteraction: false,
   },
   // ...
-]
+];
 ```
