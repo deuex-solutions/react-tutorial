@@ -76,6 +76,12 @@ function App() {
           onRequestClose={() => {
             setTourPlaying(false);
           }}
+          showCloseButton
+          onRequestSkip = {
+            () => {
+              console.log("Skip handler triger")
+            }
+          }
         /> : null }
     </div>
   );

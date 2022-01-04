@@ -11,7 +11,8 @@ import {
   Controls,
   Arrow,
   Navigation,
-  Dot
+  Dot,
+  Close
 } from './components/index';
 import {propTypes, defaultProps} from './propTypes';
 import useScrollBlock from "./components/useScrollBlock"
@@ -49,6 +50,8 @@ const ReactTour = props => {
     maskColor,
     stepWaitTimer,
     allowScreenScroll = false,
+    onRequestSkip,
+    showCloseButton
   } = props;
   const [totalSteps] = useState(steps.length);
   const [currentStep, setCurrentStep] = useState(typeof startAt === 'number' ? startAt : 0);
@@ -148,6 +151,11 @@ const ReactTour = props => {
     }
     onRequestClose();
   }
+
+  const handleSkipClick = () => {
+    close();
+    onRequestSkip && onRequestSkip();
+  };
 
   const performStep = (step) => {
     const node = step.selector ? document.querySelector(step.selector) : null;
@@ -370,29 +378,30 @@ const ReactTour = props => {
         })
       : steps[currentStep].content);
 
-  return ( playTour ? <div className={'react-tutorial'}>
-    <Guide
-      ref={balloonRef}
-      windowWidth={state.w}
-      windowHeight={state.h}
-      targetWidth={state.width}
-      targetHeight={state.height}
-      targetTop={state.top}
-      targetLeft={state.left}
-      targetRight={state.right}
-      targetBottom={state.bottom}
-      helperWidth={state.helperWidth}
-      helperHeight={state.helperHeight}
-      helperPosition={state.helperPosition}
-      arrowPosition={steps[currentStep].arrowPosition}
-      rounded={rounded}
-      accentColor={accentColor}
-      defaultStyles={true}
-      padding={maskSpace}
-      className={cn(CN.helper.base, className, {
-        [CN.helper.isOpen]: playTour,
-      })}
-    >
+  return playTour ? (
+    <div className={"react-tutorial"}>
+      <Guide
+        ref={balloonRef}
+        windowWidth={state.w}
+        windowHeight={state.h}
+        targetWidth={state.width}
+        targetHeight={state.height}
+        targetTop={state.top}
+        targetLeft={state.left}
+        targetRight={state.right}
+        targetBottom={state.bottom}
+        helperWidth={state.helperWidth}
+        helperHeight={state.helperHeight}
+        helperPosition={state.helperPosition}
+        arrowPosition={steps[currentStep].arrowPosition}
+        rounded={rounded}
+        accentColor={accentColor}
+        defaultStyles={true}
+        padding={maskSpace}
+        className={cn(CN.helper.base, className, {
+          [CN.helper.isOpen]: playTour,
+        })}
+      >
         {children}
         {stepContent}
         {showNumber && (
@@ -400,7 +409,7 @@ const ReactTour = props => {
             {/* {typeof badgeContent === 'function'
               ? badgeContent(currentStep + 1, steps.length)
               : currentStep + 1} */}
-              {currentStep + 1}
+            {currentStep + 1}
           </Badge>
         )}
         {(showButtons || showNavigation) && (
@@ -417,7 +426,7 @@ const ReactTour = props => {
               <Navigation data-tour-elem="navigation">
                 {steps.map((s, i) => (
                   <Dot
-                    key={`${s.selector ? s.selector : 'undef'}_${i}`}
+                    key={`${s.selector ? s.selector : "undef"}_${i}`}
                     onClick={() => goTo(i)}
                     current={currentStep}
                     index={i}
@@ -456,29 +465,36 @@ const ReactTour = props => {
             )}
           </Controls>
         )}
-    </Guide>
-    <SvgMask
-      windowWidth={state.w}
-      windowHeight={state.h}
-      targetWidth={state.width}
-      targetHeight={state.height}
-      targetTop={state.top}
-      targetLeft={state.left}
-      padding={maskSpace}
-      rounded={rounded}
-      className={maskClassName}
-      disableInteraction={
-        steps[currentStep].stepInteraction === false || disableInteraction
-          ? !steps[currentStep].stepInteraction
-          : disableInteraction
-      }
-      maskColor={maskColor}
-      disableInteractionClassName={cn(
-        CN.mask.disableInteraction,
-        highlightedMaskClassName
-      )}
-    />
-  </div> : null);
+        {showCloseButton && (
+          <Close
+            onClick={handleSkipClick}
+            className="reactour__close"
+          />
+        )}
+      </Guide>
+      <SvgMask
+        windowWidth={state.w}
+        windowHeight={state.h}
+        targetWidth={state.width}
+        targetHeight={state.height}
+        targetTop={state.top}
+        targetLeft={state.left}
+        padding={maskSpace}
+        rounded={rounded}
+        className={maskClassName}
+        disableInteraction={
+          steps[currentStep].stepInteraction === false || disableInteraction
+            ? !steps[currentStep].stepInteraction
+            : disableInteraction
+        }
+        maskColor={maskColor}
+        disableInteractionClassName={cn(
+          CN.mask.disableInteraction,
+          highlightedMaskClassName
+        )}
+      />
+    </div>
+  ) : null;
 };
 
 const initialState = {
