@@ -77,11 +77,6 @@ function App() {
             setTourPlaying(false);
           }}
           showCloseButton
-          onRequestSkip = {
-            () => {
-              console.log("Skip handler triger")
-            }
-          }
         /> : null }
     </div>
   );
