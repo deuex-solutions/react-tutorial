@@ -1,6 +1,6 @@
 {
   "name": "@deuex-solutions/react-tour",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "To learn user about how component works in the react app.",
   "main": "dist/reacttour.min.js",
   "scripts": {
