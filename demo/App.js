@@ -76,6 +76,7 @@ function App() {
           onRequestClose={() => {
             setTourPlaying(false);
           }}
+          showCloseButton
         /> : null }
     </div>
   );

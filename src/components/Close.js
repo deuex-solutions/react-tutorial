@@ -23,8 +23,8 @@ Close.propTypes = {
 
 const StyledClose = styled(Close)`
   position: absolute;
-  top: 22px;
-  right: 22px;
+  top: 15px;
+  right: 15px;
   width: 9px;
   height: 9px;
   color: #5e5e5e;
