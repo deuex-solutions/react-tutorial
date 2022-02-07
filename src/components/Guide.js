@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import * as hx from './../Utils';
 
 const Guide = styled.div`
   --reactour-accent: ${props => props.accentColor};
