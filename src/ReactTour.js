@@ -84,7 +84,6 @@ const ReactTour = props => {
     if(playTour !== tourPlaying && playTour) {
       if (balloonRef.current) {
         balloonRef.current.focus()
-        console.log('onAfterOpen called...')
         if (onAfterOpen && typeof onAfterOpen === 'function') {
           onAfterOpen(helper.current);
         }
@@ -287,7 +286,6 @@ const ReactTour = props => {
     if(step.mouseDownReceived && step.dropSelector){
       const node = step.dropSelector ? document.querySelector(step.dropSelector) : null;
       bringNodeToView(node, step);
-      // console.log(e);
       step.mouseMoved = true;
     }
   }
@@ -441,7 +439,6 @@ const ReactTour = props => {
             right: rightPosition,
             left: leftPosition,
           };
-          console.log(posiblePosition);
           if (helperPosition && posiblePosition[helperPosition]) {
             position = helperPosition;
           } else {
