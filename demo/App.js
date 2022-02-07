@@ -19,14 +19,12 @@ function App() {
     {
         content: 'Click on btn, Lorem Ipsum is simply dummy text of the printing and typesetting Lorem Ipsum is simply dummy text of the printing and typesetting',
         actionType: 'click',
-        position: 'bottom',
         selector: "#btn1",
         beforeNext: () => {setShowNameTextBox(true)}
     },
     {
         content: 'double click this item',
         actionType: 'dblclick',
-        position: 'right',
         arrowPosition: 'left',
         selector: "#btn2",
         beforePrev: () => {setShowNameTextBox(false)}

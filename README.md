@@ -304,10 +304,7 @@ steps: PropTypes.arrayOf(
                 PropTypes.element,
                 PropTypes.func,
               ]).isRequired,
-            position: PropTypes.oneOfType([
-                PropTypes.arrayOf(PropTypes.number),
-                PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
-            ]),
+            position: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
             arrowPosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
             dropSelector: PropTypes.string,
             actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragndrop','dragwithmove', 'custom', 'wait']),
@@ -367,9 +364,7 @@ const steps = [
         {inDOM && '🎉 Look at your step!'}
       </div>
     ),
-    position: 'top',
-    // you could do something like:
-    // position: [160, 250],
+    position: 'top', // Position is optional, if not provided, tour will auto calculate the position.
     style: {
       backgroundColor: '#bada55',
     },

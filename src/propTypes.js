@@ -9,10 +9,7 @@ export const propTypes = {
                 PropTypes.element,
                 PropTypes.func,
               ]).isRequired,
-            position: PropTypes.oneOfType([
-                PropTypes.arrayOf(PropTypes.number),
-                PropTypes.oneOf(['top', 'right', 'bottom', 'left', 'center']),
-            ]),
+            position: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
             dropSelector: PropTypes.string,
             actionType: PropTypes.oneOf(['click', 'dblclick', 'typing', 'dragdrop','dragwithmove', 'custom', 'enter', 'wait']),
             userTypeText: PropTypes.string,
