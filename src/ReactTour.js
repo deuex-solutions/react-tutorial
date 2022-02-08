@@ -17,7 +17,6 @@ import {
 import {propTypes, defaultProps} from './propTypes';
 import useScrollBlock from "./components/useScrollBlock"
 import CN from './classNames'
-import * as hx from './Utils';
 
 
 const ReactTour = props => {
@@ -150,6 +149,7 @@ const ReactTour = props => {
       onBeforeClose(balloonRef.current)
     }
     onRequestClose();
+    allowScroll();
   }
 
   const handleSkipClick = () => {
@@ -404,7 +404,8 @@ const ReactTour = props => {
         let position = helperPosition;
         let top = 0,
           left = 0,
-          arrowPosition = "bottom";
+          arrowPosition = "bottom",
+          counter = 0;
 
         const targetXcenter = targetWidth / 2;
         const targetYcenter = targetHeight / 2;
@@ -439,6 +440,9 @@ const ReactTour = props => {
             right: rightPosition,
             left: leftPosition,
           };
+
+          counter++;
+
           if (helperPosition && posiblePosition[helperPosition]) {
             position = helperPosition;
           } else {
@@ -451,14 +455,23 @@ const ReactTour = props => {
             } else if (leftPosition) {
               position = "left";
             } else {
-              checkPosition(false);
+              if(counter > 1){
+                position = "center";
+              }else{
+                checkPosition(false);
+              }
             }
           }
         };
 
         if (targetWidth && targetHeight) {
-          checkPosition(!helperPosition);
+          if (helperPosition) {
+            checkPosition(helperWidth > targetWidth && helperPosition);
+          } else {
+            checkPosition(true);
+          }
         }
+
 
         switch (position) {
           case "top":
@@ -485,6 +498,10 @@ const ReactTour = props => {
             arrowPosition = "right";
 
             break;
+          case "center":
+            top = Math.round(available.top + targetYcenter - helperYcenter);
+            left = Math.round(available.left + targetXcenter - helperXcenter);
+            arrowPosition = "bottom";
 
           default:
             break;

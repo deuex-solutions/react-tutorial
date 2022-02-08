@@ -11,9 +11,12 @@ function App() {
   const tuteSteps = [
     {
       content: 'Type "Hello world" and hit Enter',
+      selector: "#big-data-container"
+    },
+    {
+      content: 'Type "Hello world" and hit Enter',
       actionType: 'enter',
       userTypeText:'Hello world',
-      position: 'bottom',
       selector: "#name2"
     },
     {
@@ -25,15 +28,12 @@ function App() {
     {
         content: 'double click this item',
         actionType: 'dblclick',
-        arrowPosition: 'left',
         selector: "#btn2",
         beforePrev: () => {setShowNameTextBox(false)}
     },
     {
         content: 'Type "Hello world"',
         actionType: 'typing',
-        position: 'right',
-        arrowPosition: 'left',
         userTypeText:'Hello world',
         selector: "#name1"
     }
@@ -52,7 +52,7 @@ function App() {
   },[])
 
   return (
-    <div style={{height: '200vh'}} className="App">
+    <div className="App">
       <p>Welcome to react Tour</p>
       <MaterialButtonPrimary
         name={'Try it'}
@@ -66,6 +66,23 @@ function App() {
       {showNameTextBox ? <input type={'text'} id={'name1'} onChange={(e) => {setTypeValue(e.target.value)}} value={typeValue} placeholder={'Enter Text'} /> : null}
       <input type={'text'} id={'name2'} placeholder={'Type Text and hit enter'} />
       <PathWithSteps />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "80vh",
+        }}
+      >
+        <div
+          id="big-data-container"
+          style={{ width: "600px", height: "600px", backgroundColor: "gray" }}
+        />
+      </div>
+
+     
+
       {tourPlaying ?
         <ReactTour
           steps={stps}
