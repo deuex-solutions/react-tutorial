@@ -403,6 +403,92 @@ const ReactTour = props => {
         })
       : steps[currentStep].content);
 
+      const checkPosition = (checkStrickly, coords, counter) => {
+        const {
+          helperWidth,
+          helperHeight,
+          helperPosition,
+          available,
+          targetXcenter,
+          targetYcenter,
+          helperXcenter,
+          helperYcenter,
+          bufferSpace,
+        } = coords;
+
+        let count = counter;
+        let position = helperPosition;
+
+        const topPosition = checkStrickly
+          ? available.top > helperHeight + bufferSpace &&
+            helperXcenter - targetXcenter <= available.left &&
+            helperXcenter - targetXcenter <= available.right
+          : available.top > helperHeight + bufferSpace;
+        const bottomPosition = checkStrickly
+          ? available.bottom > helperHeight + bufferSpace &&
+            helperXcenter - targetXcenter <= available.left &&
+            helperXcenter - targetXcenter <= available.right
+          : available.bottom > helperHeight + bufferSpace;
+        const rightPosition = checkStrickly
+          ? available.right > helperWidth + bufferSpace &&
+            helperYcenter - targetYcenter <= available.top &&
+            helperYcenter - targetYcenter <= available.bottom
+          : available.right > helperWidth + bufferSpace;
+        const leftPosition = checkStrickly
+          ? available.left > helperWidth + bufferSpace &&
+            helperYcenter - targetYcenter <= available.top &&
+            helperYcenter - targetYcenter <= available.bottom
+          : available.left > helperWidth + bufferSpace;
+
+        const posiblePosition = {
+          top: topPosition,
+          bottom: bottomPosition,
+          right: rightPosition,
+          left: leftPosition,
+        };
+
+        count++;
+
+        if (helperPosition && posiblePosition[helperPosition]) {
+          position = helperPosition;
+        } else {
+          let foundPosition = false;
+
+          for (let i = 0; i < bubbleOrder.length; i++) {
+            if (bubbleOrder[i] === "top" && topPosition) {
+              position = "top";
+              foundPosition = true;
+              break;
+            }
+            if (bubbleOrder[i] === "bottom" && bottomPosition) {
+              position = "bottom";
+              foundPosition = true;
+              break;
+            }
+            if (bubbleOrder[i] === "right" && rightPosition) {
+              position = "right";
+              foundPosition = true;
+              break;
+            }
+            if (bubbleOrder[i] === "left" && leftPosition) {
+              position = "left";
+              foundPosition = true;
+              break;
+            }
+          }
+
+          if (!foundPosition) {
+            if (count < 2) {
+              position = checkPosition(false, coords, count);
+            } else {
+              position = "center";
+            }
+          }
+        }
+
+        return position;
+      };
+
       const getTransformPosition = (positionData) => {
         const {
           targetTop,
@@ -438,83 +524,23 @@ const ReactTour = props => {
         const helperXcenter = helperWidth / 2;
         const helperYcenter = helperHeight / 2;
 
-        const checkPosition = (checkStrickly) => {
-          const topPosition = checkStrickly
-            ? available.top > helperHeight + bufferSpace &&
-              helperXcenter - targetXcenter <= available.left &&
-              helperXcenter - targetXcenter <= available.right
-            : available.top > helperHeight + bufferSpace;
-          const bottomPosition = checkStrickly
-            ? available.bottom > helperHeight + bufferSpace &&
-              helperXcenter - targetXcenter <= available.left &&
-              helperXcenter - targetXcenter <= available.right
-            : available.bottom > helperHeight + bufferSpace;
-          const rightPosition = checkStrickly
-            ? available.right > helperWidth + bufferSpace &&
-              helperYcenter - targetYcenter <= available.top &&
-              helperYcenter - targetYcenter <= available.bottom
-            : available.right > helperWidth + bufferSpace;
-          const leftPosition = checkStrickly
-            ? available.left > helperWidth + bufferSpace &&
-              helperYcenter - targetYcenter <= available.top &&
-              helperYcenter - targetYcenter <= available.bottom
-            : available.left > helperWidth + bufferSpace;
-
-          const posiblePosition = {
-            top: topPosition,
-            bottom: bottomPosition,
-            right: rightPosition,
-            left: leftPosition,
-          };
-
-          counter++;
-
-          if (helperPosition && posiblePosition[helperPosition]) {
-            position = helperPosition;
-          } else {
-            let foundPosition = false;
-
-            for (let i = 0; i < bubbleOrder.length; i++) {
-              if (bubbleOrder[i] === "top" && topPosition) {
-                position = "top";
-                foundPosition = true;
-                break;
-              }
-              if (bubbleOrder[i] === "bottom" && bottomPosition) {
-                position = "bottom";
-                foundPosition = true;
-                break;
-              }
-              if (bubbleOrder[i] === "right" && rightPosition) {
-                position = "right";
-                foundPosition = true;
-                break;
-              }
-              if (bubbleOrder[i] === "left" && leftPosition) {
-                position = "left";
-                foundPosition = true;
-                break;
-              }
-            }
-
-            if (!foundPosition) {
-              if (counter > 1) {
-                position = "center";
-              } else {
-                checkPosition(false);
-              }
-            }
-          }
-        };
+        const coords = {
+          ...positionData,
+          available,
+          targetXcenter,
+          targetYcenter,
+          helperXcenter,
+          helperYcenter,
+          bufferSpace,
+        }
 
         if (targetWidth && targetHeight) {
           if (helperPosition) {
-            checkPosition(helperWidth > targetWidth && helperPosition);
+          position = checkPosition(helperWidth > targetWidth && helperPosition, coords);
           } else {
-            checkPosition(true);
+          position = checkPosition(true, coords, counter);
           }
         }
-
 
         switch (position) {
           case "top":
