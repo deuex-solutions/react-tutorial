@@ -26,14 +26,12 @@ function PathCreator(props) {
             {
                 content: 'Click and drag this to other red circle',
                 actionType: 'dragwithmove',
-                position: 'bottom',
                 selector: "#circle1",
                 dropSelector: "#circle2"
             },
             {
                 content: 'Drag this react to other end',
                 actionType: 'dragdrop',
-                position: 'bottom',
                 selector: "#rect1",
                 dropSelector: "#rect2"
             }

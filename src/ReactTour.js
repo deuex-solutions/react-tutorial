@@ -17,7 +17,8 @@ import {
 import {propTypes, defaultProps} from './propTypes';
 import useScrollBlock from "./components/useScrollBlock"
 import CN from './classNames'
-import * as hx from './Utils';
+
+const DEFAULT_BUBBLE_POSITION = ['top', 'bottom', 'right', 'left'];
 
 
 const ReactTour = props => {
@@ -52,13 +53,15 @@ const ReactTour = props => {
     stepWaitTimer,
     allowScreenScroll = false,
     onRequestSkip,
-    showCloseButton
+    showCloseButton,
+    bubblePosition,
   } = props;
   const [totalSteps] = useState(steps.length);
   const [currentStep, setCurrentStep] = useState(typeof startAt === 'number' ? startAt : 0);
   const balloonRef = useRef(null);
   const helper = useRef(null);
   const [tourPlaying, setTourPlaying] = useState(playTour);
+  const [bubbleOrder, setBubbleOrder] = useState(DEFAULT_BUBBLE_POSITION);
   const [blockScroll, allowScroll] = useScrollBlock();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -71,6 +74,28 @@ const ReactTour = props => {
       close();
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    if (bubblePosition && bubblePosition.length) {
+      const positionOrder = [];
+      const remainingPosition = [];
+
+      const updatePosition = (type) => {
+        if (bubblePosition.indexOf(type) <= 0) {
+          positionOrder[bubblePosition.indexOf(type)] = type;
+        } else {
+          remainingPosition.push(type);
+        }
+      };
+
+      DEFAULT_BUBBLE_POSITION.forEach((position) => {
+        updatePosition(position);
+      });
+
+      setBubbleOrder([...positionOrder, ...remainingPosition]);
+    }
+  }, []);
+  
 
   useEffect(() => {
     if (allowScreenScroll) {
@@ -150,6 +175,7 @@ const ReactTour = props => {
       onBeforeClose(balloonRef.current)
     }
     onRequestClose();
+    allowScroll();
   }
 
   const handleSkipClick = () => {
@@ -377,6 +403,92 @@ const ReactTour = props => {
         })
       : steps[currentStep].content);
 
+      const checkPosition = (checkStrickly, coords, counter) => {
+        const {
+          helperWidth,
+          helperHeight,
+          helperPosition,
+          available,
+          targetXcenter,
+          targetYcenter,
+          helperXcenter,
+          helperYcenter,
+          bufferSpace,
+        } = coords;
+
+        let count = counter;
+        let position = helperPosition;
+
+        const topPosition = checkStrickly
+          ? available.top > helperHeight + bufferSpace &&
+            helperXcenter - targetXcenter <= available.left &&
+            helperXcenter - targetXcenter <= available.right
+          : available.top > helperHeight + bufferSpace;
+        const bottomPosition = checkStrickly
+          ? available.bottom > helperHeight + bufferSpace &&
+            helperXcenter - targetXcenter <= available.left &&
+            helperXcenter - targetXcenter <= available.right
+          : available.bottom > helperHeight + bufferSpace;
+        const rightPosition = checkStrickly
+          ? available.right > helperWidth + bufferSpace &&
+            helperYcenter - targetYcenter <= available.top &&
+            helperYcenter - targetYcenter <= available.bottom
+          : available.right > helperWidth + bufferSpace;
+        const leftPosition = checkStrickly
+          ? available.left > helperWidth + bufferSpace &&
+            helperYcenter - targetYcenter <= available.top &&
+            helperYcenter - targetYcenter <= available.bottom
+          : available.left > helperWidth + bufferSpace;
+
+        const posiblePosition = {
+          top: topPosition,
+          bottom: bottomPosition,
+          right: rightPosition,
+          left: leftPosition,
+        };
+
+        count++;
+
+        if (helperPosition && posiblePosition[helperPosition]) {
+          position = helperPosition;
+        } else {
+          let foundPosition = false;
+
+          for (let i = 0; i < bubbleOrder.length; i++) {
+            if (bubbleOrder[i] === "top" && topPosition) {
+              position = "top";
+              foundPosition = true;
+              break;
+            }
+            if (bubbleOrder[i] === "bottom" && bottomPosition) {
+              position = "bottom";
+              foundPosition = true;
+              break;
+            }
+            if (bubbleOrder[i] === "right" && rightPosition) {
+              position = "right";
+              foundPosition = true;
+              break;
+            }
+            if (bubbleOrder[i] === "left" && leftPosition) {
+              position = "left";
+              foundPosition = true;
+              break;
+            }
+          }
+
+          if (!foundPosition) {
+            if (count < 2) {
+              position = checkPosition(false, coords, count);
+            } else {
+              position = "center";
+            }
+          }
+        }
+
+        return position;
+      };
+
       const getTransformPosition = (positionData) => {
         const {
           targetTop,
@@ -404,60 +516,30 @@ const ReactTour = props => {
         let position = helperPosition;
         let top = 0,
           left = 0,
-          arrowPosition = "bottom";
+          arrowPosition = "bottom",
+          counter = 0;
 
         const targetXcenter = targetWidth / 2;
         const targetYcenter = targetHeight / 2;
         const helperXcenter = helperWidth / 2;
         const helperYcenter = helperHeight / 2;
 
-        const checkPosition = (checkStrickly) => {
-          const topPosition = checkStrickly
-            ? available.top > helperHeight + bufferSpace &&
-              helperXcenter - targetXcenter <= available.left &&
-              helperXcenter - targetXcenter <= available.right
-            : available.top > helperHeight + bufferSpace;
-          const bottomPosition = checkStrickly
-            ? available.bottom > helperHeight + bufferSpace &&
-              helperXcenter - targetXcenter <= available.left &&
-              helperXcenter - targetXcenter <= available.right
-            : available.bottom > helperHeight + bufferSpace;
-          const rightPosition = checkStrickly
-            ? available.right > helperWidth + bufferSpace &&
-              helperYcenter - targetYcenter <= available.top &&
-              helperYcenter - targetYcenter <= available.bottom
-            : available.right > helperWidth + bufferSpace;
-          const leftPosition = checkStrickly
-            ? available.left > helperWidth + bufferSpace &&
-              helperYcenter - targetYcenter <= available.top &&
-              helperYcenter - targetYcenter <= available.bottom
-            : available.left > helperWidth + bufferSpace;
-
-          const posiblePosition = {
-            top: topPosition,
-            bottom: bottomPosition,
-            right: rightPosition,
-            left: leftPosition,
-          };
-          if (helperPosition && posiblePosition[helperPosition]) {
-            position = helperPosition;
-          } else {
-            if (topPosition) {
-              position = "top";
-            } else if (bottomPosition) {
-              position = "bottom";
-            } else if (rightPosition) {
-              position = "right";
-            } else if (leftPosition) {
-              position = "left";
-            } else {
-              checkPosition(false);
-            }
-          }
-        };
+        const coords = {
+          ...positionData,
+          available,
+          targetXcenter,
+          targetYcenter,
+          helperXcenter,
+          helperYcenter,
+          bufferSpace,
+        }
 
         if (targetWidth && targetHeight) {
-          checkPosition(!helperPosition);
+          if (helperPosition) {
+          position = checkPosition(helperWidth > targetWidth && helperPosition, coords);
+          } else {
+          position = checkPosition(true, coords, counter);
+          }
         }
 
         switch (position) {
@@ -485,6 +567,10 @@ const ReactTour = props => {
             arrowPosition = "right";
 
             break;
+          case "center":
+            top = Math.round(available.top + targetYcenter - helperYcenter);
+            left = Math.round(available.left + targetXcenter - helperXcenter);
+            arrowPosition = "bottom";
 
           default:
             break;
