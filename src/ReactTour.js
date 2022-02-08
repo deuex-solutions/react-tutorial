@@ -18,6 +18,8 @@ import {propTypes, defaultProps} from './propTypes';
 import useScrollBlock from "./components/useScrollBlock"
 import CN from './classNames'
 
+const DEFAULT_BUBBLE_POSITION = ['top', 'bottom', 'right', 'left'];
+
 
 const ReactTour = props => {
   const {
@@ -51,13 +53,15 @@ const ReactTour = props => {
     stepWaitTimer,
     allowScreenScroll = false,
     onRequestSkip,
-    showCloseButton
+    showCloseButton,
+    bubblePosition,
   } = props;
   const [totalSteps] = useState(steps.length);
   const [currentStep, setCurrentStep] = useState(typeof startAt === 'number' ? startAt : 0);
   const balloonRef = useRef(null);
   const helper = useRef(null);
   const [tourPlaying, setTourPlaying] = useState(playTour);
+  const [bubbleOrder, setBubbleOrder] = useState(DEFAULT_BUBBLE_POSITION);
   const [blockScroll, allowScroll] = useScrollBlock();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -70,6 +74,28 @@ const ReactTour = props => {
       close();
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    if (bubblePosition && bubblePosition.length) {
+      const positionOrder = [];
+      const remainingPosition = [];
+
+      const updatePosition = (type) => {
+        if (bubblePosition.indexOf(type) <= 0) {
+          positionOrder[bubblePosition.indexOf(type)] = type;
+        } else {
+          remainingPosition.push(type);
+        }
+      };
+
+      DEFAULT_BUBBLE_POSITION.forEach((position) => {
+        updatePosition(position);
+      });
+
+      setBubbleOrder([...positionOrder, ...remainingPosition]);
+    }
+  }, []);
+  
 
   useEffect(() => {
     if (allowScreenScroll) {
@@ -446,18 +472,35 @@ const ReactTour = props => {
           if (helperPosition && posiblePosition[helperPosition]) {
             position = helperPosition;
           } else {
-            if (topPosition) {
-              position = "top";
-            } else if (bottomPosition) {
-              position = "bottom";
-            } else if (rightPosition) {
-              position = "right";
-            } else if (leftPosition) {
-              position = "left";
-            } else {
-              if(counter > 1){
+            let foundPosition = false;
+
+            for (let i = 0; i < bubbleOrder.length; i++) {
+              if (bubbleOrder[i] === "top" && topPosition) {
+                position = "top";
+                foundPosition = true;
+                break;
+              }
+              if (bubbleOrder[i] === "bottom" && bottomPosition) {
+                position = "bottom";
+                foundPosition = true;
+                break;
+              }
+              if (bubbleOrder[i] === "right" && rightPosition) {
+                position = "right";
+                foundPosition = true;
+                break;
+              }
+              if (bubbleOrder[i] === "left" && leftPosition) {
+                position = "left";
+                foundPosition = true;
+                break;
+              }
+            }
+
+            if (!foundPosition) {
+              if (counter > 1) {
                 position = "center";
-              }else{
+              } else {
                 checkPosition(false);
               }
             }

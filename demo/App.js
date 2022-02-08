@@ -91,6 +91,7 @@ function App() {
           onRequestClose={() => {
             setTourPlaying(false);
           }}
+          bubblePosition={['right', 'left', 'bottom', 'top']}
           showCloseButton
         /> : null }
     </div>
