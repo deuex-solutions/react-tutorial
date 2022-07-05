@@ -1,8 +1,9 @@
 {
   "name": "@deuex-solutions/react-tour",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "To learn user about how component works in the react app.",
   "main": "dist/reacttour.min.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development --open --hot",
