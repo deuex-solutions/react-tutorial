@@ -1,6 +1,6 @@
 {
   "name": "@deuex-solutions/react-tour",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "To learn user about how component works in the react app.",
   "main": "dist/reacttour.min.js",
   "types": "index.d.ts",
@@ -19,6 +19,7 @@
   ],
   "files": [
     "dist",
+    "index.d.ts",
     "README.md"
   ],
   "author": "Chirag Madlani",
