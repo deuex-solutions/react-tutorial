@@ -16,12 +16,12 @@ import ReactTour from 'reacttour.min.js'    // prod
 import ReactTour from 'reacttour.js'    // dev
 ```
 
-<small>[styled-components](https://www.styled-components.com/) it isn't bundled into the package and is required `styled-components@^4` and `react@^16.3` due to the use of [createRef](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs), so: </small>
+<small>[styled-components](https://www.styled-components.com/) it isn't bundled into the package and is required `styled-components@^6.1.8` and `react@^16.3` due to the use of [createRef](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs), so: </small>
 
 ```zsh
-npm i -S styled-components@^4.0.0
+npm i -S styled-components@^6.1.8
 # or
-yarn add styled-components@^4.0.0
+yarn add styled-components@^6.1.8
 ```
 
 ## Usage
