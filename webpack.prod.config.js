@@ -15,16 +15,18 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist/'),
-        publicPath: '',
+        publicPath: '/',
         filename: 'reacttour.min.js',
-        libraryTarget: 'umd'
+        library: {
+            type: 'umd',
+        },
     },
-    externals: [
-        "react",
-        "react-dom",
-        "styled-components",
-        "lodash",
-        "scroll-smooth",
-        "scrollparent"
-    ],
+    externals: {
+        react: "react",
+        "react-dom": "react-dom",
+        "styled-components": "styled-components",
+        lodash: "lodash",
+        "scroll-smooth": "scroll-smooth",
+        scrollparent: "scrollparent",
+    },
 };
