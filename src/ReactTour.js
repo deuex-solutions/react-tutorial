@@ -319,7 +319,7 @@ const ReactTour = props => {
     const step = steps[currentStep];
     const dropArea = step.dropSelector ? document.querySelector(step.dropSelector) : null;
     const node = step.selector ? document.querySelector(step.selector) : null;
-    if(dropArea && step.mouseDownReceived && e.path[0] === dropArea){
+    if(dropArea && step.mouseDownReceived && e.target === dropArea){
       node.removeEventListener('mousedown', dragMouseDown);
       window.removeEventListener('drag', dragMouseMove);
       window.removeEventListener('dragend', dragEnd);
@@ -343,6 +343,16 @@ const ReactTour = props => {
 
   function makeCalculations (nodeRect, helperPosition) {
     const { w, h } = getWindow();
+    if (!balloonRef.current) {
+      dispatch({
+        type: 'NO_DOM_NODE',
+        helperPosition,
+        w,
+        h,
+        inDOM: false,
+      });
+      return;
+    }
     const { width: helperWidth, height: helperHeight } = getNodeRect(
       balloonRef.current
     );
