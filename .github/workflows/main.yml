@@ -3,7 +3,7 @@ name: test-required-checks
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   check-required-status:
