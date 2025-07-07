@@ -1,0 +1,14 @@
+name: test-required-checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-required-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output required check test
+        run: |
+          echo "This is a test to check required status behavior."
